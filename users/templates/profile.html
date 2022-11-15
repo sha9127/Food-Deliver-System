@@ -1,0 +1,35 @@
+{% extends "home.html" %} {% block content %}
+<div class="content-section">
+	<div class="media">
+		<img class="rounded-circle account-img" src="{{ profile.image.url }}" />
+		<div class="media-body">
+			<h2 class="account-heading">{{profile.name}}</h2>
+			<p class="text-secondary">{{profile.email}}</p>
+		</div>
+	</div>
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		<fieldset class="form-group">
+			<legend class="border-bottom mb-4">Profile Info</legend>
+			<label for="name">Name :</label>
+			<input type="text" name="name" value="{{profile.name}}" /><br /><br />
+			<label for="email">Email :</label>
+			<input type="email" name="email" value="{{profile.email}}" /><br /><br />
+			<label for="address">Address :</label>
+			<input
+				type="text"
+				name="address"
+				value="{{profile.address}}"
+			/><br /><br />
+			<label for="profile_pic">Profile Picture :</label>
+
+			<input type="file" name="image" value="{{ profile.image.url }}" />
+		</fieldset>
+		<div class="form-group">
+			<button class="btn btn-outline-info" type="submit">Update</button>
+		</div>
+	</form>
+	<!-- FORM HERE -->
+</div>
+
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'home.html' %} {% block content %}
+<div class="context-section mt-5">
+	<form method="POST">
+		{% csrf_token %}
+		<fieldset action="." class="form-group">
+			<legend class="border-bottom mb-4">Log In</legend>
+			Email :<input type="email" name="email" placeholder="Enter Email" />
+			Password :<input
+				type="password"
+				name="password"
+				placeholder="Enter Password"
+				id="myInput"
+			/>
+			&nbsp;&nbsp; <input type="checkbox" onclick="myFunction()" />Show Password
+			<script>
+				function myFunction() {
+					var x = document.getElementById("myInput");
+					if (x.type === "password") {
+						x.type = "text";
+					} else {
+						x.type = "password";
+					}
+				}
+			</script>
+		</fieldset>
+		<input type="submit" name=" Log In " value="Log In" />
+		<br /><br />
+	</form>
+
+	<div class="border-top pt-3">
+		<small class="text-muted">
+			Need an Account ?
+			<a href="{% url 'signup'%}" class="ml-2"> Sign Up Now </a>
+		</small>
+	</div>
+</div>
+
+{% endblock %}

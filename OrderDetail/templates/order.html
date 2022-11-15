@@ -1,0 +1,42 @@
+{% extends 'home.html' %} {% block content %}
+<h1>Past Order Detail</h1>
+<b><hr /></b>
+<div>
+	<label>Name:{{name}}</label><br />
+	<label>Address:{{address}}</label><br />
+</div>
+<hr />
+
+<table style="width: 100%">
+	<tr>
+		<th>Order Id</th>
+		<th>Restaurant</th>
+		<th>Total Price</th>
+		<th>Items</th>
+		<th>Order Created</th>
+		<th>Order Update</th>
+		<th>Order status</th>
+
+		{% for i in query %}
+	</tr>
+
+	<tr>
+		<td>{{i.id}}</td>
+		<td>{{i.restaurant.restaurant_user.name}}</td>
+		<td>{{i.total_price}}</td>
+
+		<td>{{i.food_item}}</td>
+
+		<td>{{i.created_date}}</td>
+		<td>{{i.updated_date}}</td>
+		<td>{{i.status}}</td>
+	</tr>
+	{% endfor %}
+
+	<br />
+</table>
+<br />
+<br />
+<br />
+<hr />
+{% endblock %}

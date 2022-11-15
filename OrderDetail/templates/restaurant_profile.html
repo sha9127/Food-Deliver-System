@@ -1,0 +1,80 @@
+{% extends 'home.html' %} {% block content %}
+<div class="form-group">
+	<button class="btn btn-outline-info" type="submit" name="add">
+		<a class="btn btn-primary" href="{% url 'addItem'%}">Add Item</a>
+	</button>
+</div>
+<div class="container-fluid mt-3">
+	<div class="row">
+		<div class="col-lg-4 mt-3 mx-auto">
+			<div class="list-group">
+				{% for category in categories %}
+				<a
+					href="/?category={{category.id}}"
+					class="list-group-item list-group-item-action"
+				>
+					{{category.name}}</a
+				>
+				{% endfor %}
+			</div>
+		</div>
+
+		<div id="food" class="col-lg-8 mx-auto mt-3">
+			<div class="row mx-auto">
+				<div class="card-body">
+					{% for food in foods %}
+					<form method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<fieldset class="form-group">
+							<img
+								class="rounded-circle account-img"
+								src="{{ food.image.url }}"
+							/><br />
+							<legend class="border-bottom mb-4">Food Item</legend>
+							<label for="name">Food Title :</label>
+							<input
+								type="text"
+								name="title"
+								value="{{food.title}}"
+							/><br /><br />
+							<label for="email">Food Description :</label>
+							<textarea type="text" name="description">
+{{food.description}}</textarea
+							><br /><br />
+							<label for="price">Food Price :</label>
+							<input
+								type="text"
+								name="price"
+								value="{{food.price}}"
+							/><br /><br />
+							<input
+								hidden
+								type="text"
+								name="id"
+								value="{{food.id}}"
+							/><br /><br />
+
+							<label for="profile_pic">Food Picture :</label>
+
+							<input type="file" name="image" value="{{ food.image.url }}" />
+						</fieldset>
+						<div class="form-group">
+							<button class="btn btn-outline-info" type="submit" name="update">
+								Update
+							</button>
+						</div>
+
+						<div class="form-group">
+							<button class="btn btn-outline-info" type="submit" name="delete">
+								Delete
+							</button>
+						</div>
+					</form>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

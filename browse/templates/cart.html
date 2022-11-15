@@ -1,0 +1,52 @@
+{% extends 'home.html' %} {% block content %}
+<style>
+	table,
+	th,
+	td {
+		border: 1px solid black;
+	}
+</style>
+<body>
+	<h1>Cart Detail</h1>
+	<b><hr /></b>
+	<div>
+		<label>Name:{{Name}}</label><br />
+		<label>Address:{{Address}}</label><br />
+	</div>
+	<hr />
+	<br />
+	<br />
+	<br />
+
+	<table style="width: 100%">
+		<tr>
+			<th>S.No</th>
+			<th>Item</th>
+			<th>Unit Price</th>
+			<th>Quantity</th>
+			<th>Total Price</th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>{{a}}</td>
+			<td>{{b}}</td>
+			<td>{{quantity}}</td>
+			<td>{{bill}}</td>
+		</tr>
+
+		<tr>
+			<th>Total Amount</th>
+			<td>{{bill}}</td>
+		</tr>
+	</table>
+	<br />
+	<br />
+	<br />
+	<hr />
+	<div>
+		<a href="#" class="btn btn-primary">Proceed to Payment</a>
+		<a href="{% url 'search'%}" class="btn btn-primary">Back to Home</a>
+	</div>
+	<hr />
+</body>
+{% endblock %}

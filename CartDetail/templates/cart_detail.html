@@ -1,0 +1,97 @@
+{% extends 'home.html' %} {% block content %}
+<h1>Order Detail</h1>
+<b><hr /></b>
+<div>
+	<label>Name:{{name}}</label><br />
+	<label>Address:{{address}}</label><br />
+</div>
+<hr />
+<br />
+<br />
+<br />
+<table style="width: 100%">
+	<tr>
+		<th>Restaurant Name</th>
+		<th>Item</th>
+		<th>Unit Price</th>
+		<th>Quantity</th>
+		{% comment %}
+		<th>Status</th>
+		{% endcomment %}
+	</tr>
+
+	{% for i in c%}
+	<tr>
+		<td>{{i.restaurant.restaurant_user.name}}</td>
+		<td>{{i.item.title}}</td>
+		<td>{{i.price}}</td>
+		<td>{{i.quantity}}</td>
+		{% comment %}
+		<td>{{i.is_ordered}}</td>
+		{% endcomment %} &nbsp;,&nbsp;,&nbsp;
+		<td>
+			<form method="POST">
+				{% csrf_token %}
+
+				<input hidden type="text" name="id" value="{{i.id}}" />
+
+				<div class="form-group">
+					<button class="btn btn-outline-info" type="submit" name="delete">
+						Remove from cart
+					</button>
+				</div>
+			</form>
+		</td>
+	</tr>
+	{% endfor%}
+	<br />
+
+	<tr>
+		<br />
+		<th>Total Amount</th>
+		<td>{{total_price}}</td>
+	</tr>
+</table>
+<br />
+<br />
+<br />
+<hr />
+<div>
+	<a href="#" class="btn btn-primary">Proceed to Payment</a>
+	<a href="{% url 'search'%}" class="btn btn-primary">Back to Home</a>
+	<form method="POST">
+		{% csrf_token %}
+		<input hidden type="text" name="checkout" />
+		<div class="form-group">
+			<button class="btn btn-outline-info" type="submit" name="checkout">
+				<a href="{% url 'success' %}" class="btn btn-primary">Checkout</a>
+			</button>
+		</div>
+	</form>
+</div>
+
+{% comment %} {% for i in c%}
+<form method="POST">
+	{% csrf_token %}
+	<input hidden type="text" name="id" value="{{i.id}}" />
+	<div class="form-group">
+		<button class="btn btn-outline-info" type="submit" name="checkout">
+			Checkout
+		</button>
+	</div>
+</form>
+{% endfor%} {% comment %} {% endcomment %} {% comment %}
+<form method="POST">
+	{% csrf_token %}
+	<input hidden type="text" name="user" value="{{food.food_id}}" />
+	<input hidden type="text" name="price" value="{{food.price}}" />
+	<input hidden type="text" name="title" value="{{food.title}}" />
+	<input hidden type="text" name="id" value="{{food.id}}" />
+
+	<div class="form-group">
+		<button class="btn btn-outline-info" type="submit">Checkout</button>
+	</div>
+</form>
+{% endcomment %}
+<hr />
+{% endblock %}

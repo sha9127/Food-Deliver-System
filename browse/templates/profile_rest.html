@@ -1,0 +1,68 @@
+{% extends 'home.html' %} {% block content %}
+
+<h1>{{food.restaurant.name}}</h1>
+<div class="col-lg-4 mt-3 mx-auto">
+	<div class="list-group">
+		{% for i in item.category %}
+		<action
+			href="/restaurant-profile/?category={{i}}"
+			class="list-group-item list-group-item-action"
+		>
+			{{i.name}}</action
+		>
+		{%endfor%} {% comment %} action="/search?search={{User.id}} {% endcomment %}
+	</div>
+</div>
+
+<div id="food" class="col-lg-8 mx-auto mt-3">
+	<div class="row mx-auto">
+		{% for food in foods %}
+		<div class="card mx-auto mb-3" style="width: 15rem">
+			<img
+				class="card-img-top"
+				src="{{ food.image.url}}"
+				alt="Card image cap"
+			/>
+			<div class="card-body align-item-center">
+				<h4 class="card-title">{{food.title}}</h4>
+				<p class="card-text">{{food.description}}</p>
+				<p class="card-text">₹ {{food.price}}</p>
+				<br />
+				<br />
+
+				<form method="POST">
+					{% csrf_token %}
+					<input hidden type="text" name="food_id" value="{{food.id}}" />
+					<input hidden type="text" name="price" value="{{food.price}}" />
+					<input hidden type="text" name="title" value="{{food.title}}" />
+					<input hidden type="text" name="id" value="{{food.id}}" />
+					{% comment %}
+					<input type="text" name="q" placeholder="Enter quantity" />
+					{% endcomment %}
+					<label for="qunatity">Qty</label>
+					<select class="select_field_class" name="option" id="option">
+						{% for i in qty %}
+						<option value="{{ i}}">{{i}}</option>
+						{% endfor %}
+					</select>
+					<br />
+					<br />
+
+					<div class="form-group">
+						<button class="btn btn-primary" type="submit">Add to Cart</button>
+					</div>
+
+					{% comment %}
+					<a
+						href="{% url 'cart' food.title food.price  %}"
+						class="btn btn-primary"
+						>Add to Cart</a
+					>
+					{% endcomment %}
+				</form>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

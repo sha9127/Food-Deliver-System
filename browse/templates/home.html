@@ -1,0 +1,300 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <!-- Required meta tags -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ 
+    <link rel='stylesheet' type="text/css" href="{% static 'main.css' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
+        <script>
+            // Initialize Firebase
+            // Firebase Console --> Settings --> General
+            // --> Register App --> Copy firebaseConfig
+            const firebaseConfig = {
+                apiKey: "AIzaSyBbzToDMnh5748JZ1-Z5YVMw-6yZxM3vAY",
+                authDomain: "test-eb006.firebaseapp.com",
+                databaseURL: "https://test-eb006-default-rtdb.firebaseio.com",
+                projectId: "test-eb006",
+                storageBucket: "test-eb006.appspot.com",
+                messagingSenderId: "456393506172",
+                appId: "1:456393506172:web:7a7d7f3a1ccc8b26f9b8f9",
+                measurementId: "G-FNRCK1FSHC",
+              };
+        
+        
+            firebase.initializeApp(firebaseConfig);
+        
+            // Firebase Messaging Service
+            const messaging = firebase.messaging();
+        
+        
+                function send_ajax_token(token){
+                console.log(token);
+                
+                $.ajax({
+                url: "{% url 'test' %}",
+                method: "POST",
+                async: false,
+                data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                'registration_id': token,
+                'type': 'web'
+                },
+                success: function (data) {
+                console.log(data);
+                },
+                error: function (err) {
+                console.log(err);
+                }
+                });
+                }
+                
+                // Get registration token. Initially this makes a network call, once retrieved
+                // subsequent calls to getToken will return from cache.
+                messaging.getToken({ vapidKey: 'BG78rZ-6xHQ0cTfDBHG7RkIjNeEJyLUSjm-xhjpnLcuoCOo0Y4TjjkAyZBfL-6gjGAaOV49mF3cK-SNXU6F2Ozg' })
+                .then((currentToken) => {
+                if (currentToken) {
+                // Send the token to your server and update the UI if necessary
+                // ...
+                //alert(currentToken);
+                send_ajax_token(currentToken);
+                } else {
+                // Show permission request UI
+                console.log('No registration token available. Request permission to generate one.');
+                // ...
+                }
+                }).catch((err) => {
+                console.log('An error occurred while retrieving token. ', err);
+                // ...
+                });
+                
+                
+                messaging.requestPermission()
+                .then(function() {
+                console.log("Have permission.");
+                return messaging.getToken();
+                })
+                .catch(function(err) {
+                console.log("Error Occurred");
+                })
+                
+                //when you on not on the webpage
+                messaging.onMessage((payload) => {
+                console.log('onMessage recieved: ', payload);
+                });
+                </script>
+
+    {% if title %}
+        <title>{{title}}</title>
+    {% else %}
+        <title>Home</title>
+    {% endif %}
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="{% url 'search'%}"> Food Delivery System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <div class="navbar-nav mr-auto">
+                        <a class="nav-item nav-link" href="{% url 'search'%}">Home</a>
+                        <a class="nav-item nav-link" href="#">About Us</a>
+                    </div>
+                        <!-- Navbar Right Side -->
+                        <div class="navbar-nav">
+                                {% if user.is_authenticated   %}
+                                    {% if request.user.role.name == 'Restaurant'   %}
+                                    
+                                    <a class="nav-item nav-link" href="{% url 'rprofile' %}">Restaurant's Profile</a>
+                                    <a class="nav-item nav-link" href="{% url 'dashboard' %}">Order's Dashboard</a>
+                                    <a class="nav-item nav-link" href="{% url 'profile' %}"> Profile</a>
+                                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                                    {% else %}
+                                    <a class="nav-item nav-link" href="{% url 'order'%}">Orders</a>
+                                    <a class="nav-item nav-link" href="{% url 'cart-detail' %}">Cart</a>
+                                    <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                                    <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                                    <a class="nav-item nav-link" href="{% url 'signup' %}">Sign Up</a>
+                                {% endif %}
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </nav>
+      </header>
+      <main role="main" class="container">
+        <div class="row">
+          <div class="col-md-8">
+            {% if messages %}
+                {% for message in messages %}
+                  <div class='alert alert-{{ message.tags }}'>
+                    {{ message }}
+                  </div>
+                {% endfor %}
+            {% endif %}
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+          
+            {% block content %}
+            
+            {% endblock %}
+          
+      </main> 
+
+    <!-- Footer -->
+        <footer class="text-center text-lg-start bg-light text-muted">
+            <!-- Section: Social media -->
+            <section
+            class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
+            >
+            <!-- Left -->
+            <div class="me-5 d-none d-lg-block">
+                <span>Get connected with us on social networks:</span>
+            </div>
+            <!-- Left -->
+        
+            <!-- Right -->
+            <div>
+                <a href="" class="me-4 text-reset">
+                <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                <i class="fab fa-twitter"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                <i class="fab fa-google"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                <i class="fab fa-instagram"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="" class="me-4 text-reset">
+                <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <!-- Right -->
+            </section>
+            <!-- Section: Social media -->
+        
+            <!-- Section: Links  -->
+            <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <!-- Content -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                    <i class="fas fa-gem me-3"></i>Company name
+                    </h6>
+                    <p>
+                    Here you can use rows and columns to organize your footer content. Lorem ipsum
+                    dolor sit amet, consectetur adipisicing elit.
+                    </p>
+                </div>
+                <!-- Grid column -->
+        
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                    Products
+                    </h6>
+                    <p>
+                    <a href="#!" class="text-reset">Angular</a>
+                    </p>
+                    <p>
+                    <a href="#!" class="text-reset">React</a>
+                    </p>
+                    <p>
+                    <a href="#!" class="text-reset">Vue</a>
+                    </p>
+                    <p>
+                    <a href="#!" class="text-reset">Laravel</a>
+                    </p>
+                </div>
+                <!-- Grid column -->
+        
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                    Useful links
+                    </h6>
+                    <p>
+                    <a href="#!" class="text-reset">Pricing</a>
+                    </p>
+                    <p>
+                    <a href="#!" class="text-reset">Settings</a>
+                    </p>
+                    <p>
+                    <a href="#!" class="text-reset">Orders</a>
+                    </p>
+                    <p>
+                    <a href="#!" class="text-reset">Help</a>
+                    </p>
+                </div>
+                <!-- Grid column -->
+        
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                    Contact
+                    </h6>
+                    <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+                    <p>
+                    <i class="fas fa-envelope me-3"></i>
+                    info@example.com
+                    </p>
+                    <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+                    <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+                </div>
+                <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+            </section>
+            <!-- Section: Links  -->
+        
+                <!-- Copyright -->
+                <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2021 Copyright:
+                <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+                </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- Footer -->
+    
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

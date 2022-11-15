@@ -1,0 +1,59 @@
+{% extends 'home.html' %} {% block content %}
+<div class="context-section mt-5 mb-5">
+	<form method="POST">
+		{% csrf_token %}
+		<h2>Sign Up</h2>
+		<hr />
+		<label for="name">Name :</label><br />
+		<input required type="text" name="name" placeholder="Enter Name" /><br />
+		<label for="address">Address :</label><br />
+		<input
+			required
+			type="text"
+			name="address"
+			placeholder="Enter Address"
+		/><br />
+		<label for="email">Email :</label><br />
+		<input required type="email" name="email" placeholder="Enter Email" /><br />
+		<label for="role">Choose a Role:</label><br />
+		{% comment %}
+		<select class="select_field_class" name="option" id="option">
+			{% for role in roles %}
+			<option value="{{role}}">{{role.name}}</option>
+			{% endfor %}
+		</select>
+		{% endcomment %}
+
+		<input
+			required
+			type="role"
+			name="role"
+			placeholder="Enter Role"
+		/>&nbsp;&nbsp;( Restaurant / Customer ) {% comment %}
+		<select name="role" id="role">
+			{% for r in role %}
+			<option name="role1" value="{{r.id}}">{{r.name}}</option>
+			{% endfor %}
+		</select>
+		{% endcomment %}
+
+		<br />
+		<label for="password1">Password 1:</label><br />
+		<input
+			required
+			type="password"
+			name="password1"
+			placeholder="Enter Password"
+		/><br />
+		<label for="password2">Password 2 :</label><br />
+		<input
+			required
+			type="password"
+			name="password2"
+			placeholder="Confirm Password"
+		/><br /><br />
+		<input type="submit" name="submit" value="Submit" /> <br /><br />
+		<hr />
+	</form>
+</div>
+{% endblock %}

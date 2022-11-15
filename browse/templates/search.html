@@ -1,0 +1,62 @@
+{% extends 'home.html' %} {% block content %}
+<div class="container mt-5">
+	<br />
+	<div class="row justify-content-center">
+		<div class="col-12 col-md-10 col-lg-12">
+			<form
+				class="card card-sm"
+				method="get"
+				action="/search?search={{User.id}}"
+			>
+				<div class="card-body row no-gutters align-items-center">
+					{% comment %}
+					<div class="col-auto">
+						<i class="fas fa-search h4 text-body"></i>
+					</div>
+					<!--end of col-->
+					{% endcomment %}
+					<div class="col">
+						<input
+							class="form-control form-control-lg form-control-borderless"
+							type="search"
+							placeholder="Search topics or keywords"
+							name="search"
+						/>
+					</div>
+					<!--end of col-->
+					<div class="col-auto">
+						<button class="btn btn-lg btn-success" type="submit">Search</button>
+					</div>
+					<!--end of col-->
+				</div>
+			</form>
+		</div>
+		<!--end of col-->
+	</div>
+</div>
+
+<div class="container-fluid mt-7">
+	<div id="food" class="col-lg-12 mx-auto mt-5">
+		<div class="row mx-auto">
+			{% for p in restaurant %}
+			<div class="card mx-auto mb-3" style="width: 10rem">
+				<img
+					class="card-img-top"
+					src="{{ p.restaurant_user.image.url }}"
+					alt="Not Available"
+				/>
+				<div class="card-body">
+					<h4 class="card-title">{{p.restaurant_user.name}}</h4>
+					<p class="card-text">{{p.description}}</p>
+					<p class="card-text">{{p.ratings}}</p>
+					<a href="{% url 'profile-rest' p.id  %}" class="btn btn-primary"
+						>Order Now</a
+					>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'home.html' %} {% block content %}
+<h1>Order Dashboard</h1>
+<b><hr /></b>
+<div>
+	<label>Name:{{name}}</label><br />
+	<label>Address:{{address}}</label><br />
+</div>
+<hr />
+
+<table style="width: 100%">
+	<tr>
+		<th>Order Id</th>
+		<th>Customer Name</th>
+		<th>Items</th>
+		<th>Total Price</th>
+		<th>Order Created</th>
+		<th>Order Updates</th>
+		<th>Order Status</th>
+		<th>Order Status1</th>
+
+		{% for i in query %}
+	</tr>
+
+	<tr>
+		<td>{{i.id}}</td>
+		<td>{{i.user.name}}</td>
+		<td>{{i.food_item}}</td>
+		<td>{{i.total_price}}</td>
+		<td>{{i.created_date}}</td>
+		<td>{{i.updated_date}}{{ord.0}}<br />{{i.status}}{{ord.0}}</td>
+		<td>{{i.status1}}</td>
+
+		{% comment %}
+		<td>
+			<select class="select_field_class" name="option" id="option">
+				{% for status in order %}
+				<option value="{{ status}}">{{status}}</option>
+				{% endfor %}
+			</select>
+		</td>
+		{% endcomment %}
+		<td>
+			<form method="POST">
+				{% csrf_token %}
+
+				<input hidden type="text" name="id" value="{{i.id}}" />
+				<td>
+					{% comment %} {{i.status}} {% endcomment %}
+					<select class="select_field_class" name="options" id="option">
+						{% comment %}
+						<option value="Cancel">Cancel</option>
+						{% endcomment %}
+						<option value="Order Received">Order Received</option>
+						<option value="Cooking">Cooking</option>
+						<option value="Out_for_Delivery">Out_for_Delivery</option>
+						<option value="Delivered">Delivered</option>
+					</select>
+					{% comment %}
+					<select
+						class="select_field_class"
+						name="option"
+						onchange="selectNum()"
+						id="option"
+					>
+						{% comment %} {% for ord in i.orderstatuses%}
+						<option value="{{ord.get_status_display}}">
+							{{ord.get_status_display}}
+						</option>
+						{% endfor %} {% for ord in order%}
+						<option value="{{ord}}">{{ord.0}}</option>
+						{% endfor %}
+					</select>
+					<script>
+						function selectNum() {
+							var strUser = document.getElementById("option").value;
+						}
+					</script>
+					{% endcomment %}
+				</td>
+				<td>
+					<div class="form-group">
+						<button class="btn btn-outline-info" type="submit" name="status">
+							Update Status
+						</button>
+					</div>
+				</td>
+			</form>
+		</td>
+	</tr>
+	{% endfor %} {% comment %}
+	<tr>
+		<td>1</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	{% endcomment %}
+
+	<br />
+</table>
+<br />
+<br />
+<br />
+<hr />
+
+<hr />
+{% endblock %}
